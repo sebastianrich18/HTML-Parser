@@ -43,14 +43,55 @@ function Block(str) {
     }
 
     let startOfEndTagIndex = str.indexOf('</') // find first < after start tag
-
+    this.inner = ""
     if(startOfEndTagIndex != -1) this.inner = str.substring(endOfOpenTagIndex+1, startOfEndTagIndex)
 }
 
-let scriptBlock = new Block('<script src="/sites/courses/js/jquery-1.12.4.min.js">console.log("cum")</script>')
-let metaBlock = new Block('<meta name="google-site-verification" content="ru2q69kfM8frBqiA_4DzYrOSI8cPkgJs826VChwZzgM" />')
-let edgeCaseBlock = new Block('<meta name="viewport" content="initial-scale=1" />')
 
-console.log(scriptBlock)
-console.log(metaBlock)
-console.log(edgeCaseBlock)
+
+
+
+
+function tester() {
+    let tests = [
+        ['<script src="/sites/courses/js/jquery-1.12.4.min.js">console.log("cum")</script>', 
+            {'type': 'script', 'attr': {"src": "/sites/courses/js/jquery-1.12.4.min.js"}, "inner": 'console.log("cum")'}],
+
+        ['<meta name="google-site-verification" content="ru2q69kfM8frBqiA_4DzYrOSI8cPkgJs826VChwZzgM" />', 
+            {'type': 'meta', 'attr': {'content': 'ru2q69kfM8frBqiA_4DzYrOSI8cPkgJs826VChwZzgM'}, 'inner': ""}],
+
+        ['<meta name="viewport" content="initial-scale=1">', 
+            {'type': 'meta', 'attr': {'content': 'initial-scale=1'}, 'inner': ""}]
+    ]
+
+    loop1:
+        for (let test of tests) {
+            function failed(where) {
+                console.log("FAILED! at", where);
+                console.log("Expected: ", test[1]);
+                console.log("Actual: ", block, '\n');
+            }
+
+            console.log("TESTING\t", test[0])
+            let block = new Block(test[0])
+            if (block.type != test[1].type) {
+                failed("type")
+                continue
+            }
+            if (block.inner != test[1].inner) {
+                failed("inner")
+                continue
+            }
+            loop2:
+                for (let key of Object.keys(test[1].attr)) {
+                    if (test[1].attr[key] != block.attr[key]) {
+                        failed("attributes")
+                        continue loop1
+                    }
+                }
+            console.log("PASSED!\n")
+
+        }
+}
+
+tester()
