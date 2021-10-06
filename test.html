@@ -8,11 +8,23 @@
         <title>Title</title>
     </head>
     <body>
-
-        <header>
-            <h1>>Header</h1>
-        </header>
-
+        <!--
+            get name of first tag
+            find first index of that name
+            IF char before index is /
+                that is closing tag
+                there is no other tags in inner 
+            ELSE
+                count + 1
+                If there is another occurence of a open tag
+                    count + 1
+                If there is an occorence of a close tag
+                    count -1
+                If count == 0
+                    that is the close tag
+         -->
+        <div>First</div><div>Second</div>
+        <div>outer<div>inner</div></div>
         <script src="Index.js"></script>
     </body>
 </html>
